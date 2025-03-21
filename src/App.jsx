@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { debounce } from "lodash";
 
 import "./index.css";
 
@@ -17,13 +18,15 @@ function App() {
       );
       const data = await response.json();
       setSuggerimenti(data);
+      console.log("API");
     } catch (error) {
       console.error(error);
     }
   };
+  const debouncedFetchProducts = useCallback(debounce(fetchProducts, 500), []);
 
   useEffect(() => {
-    fetchProducts(query);
+    debouncedFetchProducts(query);
   }, [query]);
 
   return (
